@@ -25,7 +25,6 @@ import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
 
 import com.laomo.zxing.util.Contant;
@@ -68,6 +67,9 @@ final class CameraConfigurationManager {
 	screenResolution = new Point(width, height);
 	Log.i(TAG, "Screen resolution: " + screenResolution);
 	cameraResolution = findBestPreviewSizeValue(parameters, screenResolution, false);
+	Log.i(TAG, "Camera resolution: " + cameraResolution);
+	
+	//add for for portrait by laomo
 	Point screenResolutionForCamera = new Point();
 	screenResolutionForCamera.x = screenResolution.x;
 	screenResolutionForCamera.y = screenResolution.y;
@@ -75,17 +77,6 @@ final class CameraConfigurationManager {
 	if (screenResolution.x < screenResolution.y) {
 	    screenResolutionForCamera.x = screenResolution.y;
 	    screenResolutionForCamera.y = screenResolution.x;
-	}
-	Log.i(TAG, "Camera resolution: " + cameraResolution);
-    }
-
-    protected void setDisplayOrientation(Camera camera, int angle) {
-	Method downPolymorphic;
-	try {
-	    downPolymorphic = camera.getClass().getMethod("setDisplayOrientation", new Class[] { int.class });
-	    if (downPolymorphic != null)
-		downPolymorphic.invoke(camera, new Object[] { angle });
-	} catch (Exception e1) {
 	}
     }
 
@@ -107,7 +98,6 @@ final class CameraConfigurationManager {
 	}
 
 	parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
-	//camera.setDisplayOrientation(90);
 	camera.setParameters(parameters);
     }
 

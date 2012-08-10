@@ -82,6 +82,7 @@ public final class CameraManager {
 		throw new IOException();
 	    }
 	    camera = theCamera;
+	    //add for portrait by laomo
 	    camera.setDisplayOrientation(90);
 	}
 	theCamera.setPreviewDisplay(holder);
@@ -174,27 +175,34 @@ public final class CameraManager {
      * helps with alignment as well as forces the user to hold the device far enough away to ensure the image will be in
      * focus.
      * @return The rectangle to draw on screen in window coordinates.
+     * 
+     * change for for portrait by laomo
      */
+    
     public Rect getFramingRect() {
 	if (framingRect == null) {
 	    if (camera == null) {
 		return null;
 	    }
 	    Point screenResolution = configManager.getScreenResolution();
-	    int width = screenResolution.x * 3 / 4;
+	    //int width = screenResolution.x * 3 / 4;
+	    int width = screenResolution.y * 3 / 4;
 	    if (width < MIN_FRAME_WIDTH) {
 		width = MIN_FRAME_WIDTH;
 	    } else if (width > MAX_FRAME_WIDTH) {
 		width = MAX_FRAME_WIDTH;
 	    }
-	    int height = screenResolution.y * 3 / 4;
+	    //int height = screenResolution.y * 3 / 4;
+	    int height = screenResolution.x * 3 / 4;
 	    if (height < MIN_FRAME_HEIGHT) {
 		height = MIN_FRAME_HEIGHT;
 	    } else if (height > MAX_FRAME_HEIGHT) {
 		height = MAX_FRAME_HEIGHT;
 	    }
-	    int leftOffset = (screenResolution.x - width) / 2;
-	    int topOffset = (screenResolution.y - height) / 2;
+	    //int leftOffset = (screenResolution.x - width) / 2;
+	    //int topOffset = (screenResolution.y - height) / 2;
+	    int leftOffset = (screenResolution.y - width) / 2;
+	    int topOffset = (screenResolution.x - height) / 2;
 	    framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
 	    Log.d(TAG, "Calculated framing rect: " + framingRect);
 	}
@@ -213,14 +221,10 @@ public final class CameraManager {
 	    Rect rect = new Rect(framingRect);
 	    Point cameraResolution = configManager.getCameraResolution();
 	    Point screenResolution = configManager.getScreenResolution();
-	    //	    rect.left = rect.left * cameraResolution.x / screenResolution.x;
-	    //	    rect.right = rect.right * cameraResolution.x / screenResolution.x;
-	    //	    rect.top = rect.top * cameraResolution.y / screenResolution.y;
-	    //	    rect.bottom = rect.bottom * cameraResolution.y / screenResolution.y;
-	    rect.left = rect.left * cameraResolution.y / screenResolution.x;
-	    rect.right = rect.right * cameraResolution.y / screenResolution.x;
-	    rect.top = rect.top * cameraResolution.x / screenResolution.y;
-	    rect.bottom = rect.bottom * cameraResolution.x / screenResolution.y;
+	    rect.left = rect.left * cameraResolution.x / screenResolution.x;
+	    rect.right = rect.right * cameraResolution.x / screenResolution.x;
+	    rect.top = rect.top * cameraResolution.y / screenResolution.y;
+	    rect.bottom = rect.bottom * cameraResolution.y / screenResolution.y;
 	    framingRectInPreview = rect;
 	}
 	return framingRectInPreview;
